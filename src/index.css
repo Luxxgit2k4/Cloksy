@@ -1,7 +1,8 @@
+@config "./tailwind.config.js";
 @import "tailwindcss";
 @theme {
 
-  --color-primary: #4F46E5; /* Primary blue colour for the application */
+  --color-primary: #4F46E5; /* Primary blue color for the application */
   --color-text-primary: #111827; /* Primary text color */
   --color-text-secondary: #6B7280; /* secondary text color */
 }
