@@ -21,7 +21,6 @@ export const Header = () => {
 {/* Button section */}
 <div className="flex items-center space-x-4">
     <Button variant="ghost" className="text-[6B7280]">Log In</Button>
-    <Button className="bg-[#4F46E5] hover:bg-[#4338CA] ">Sign Up</Button>
 </div>
         </header>
     );
