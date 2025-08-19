@@ -2,10 +2,10 @@ import React from "react";
 // importing button component from pre built shadcn components
 import { Button } from "@/components/ui/button";
 // importing logo 
-import { Logo } from "./icon";
+import { Logo } from "./Logo"
 
 // Header component 
-export const LandingHeader = () => {
+export const Header = () => {
     return (
         // Header with responsive design md (medium screens)
         <header className="w-full bg-white py-4 px-6 md:px-10 flex items-center border-b">
