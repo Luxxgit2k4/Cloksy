@@ -5,6 +5,7 @@ import { Footer } from "@/components/Landing_page/Footer";
 import React from "react"
 import { Routes, Route} from 'react-router-dom';
 import { LandingPage } from "./components/Landing_page/LandingPage";
+import { SignUpPage } from "./components/auth/Signup";
 function App() {
    return (
     <div className="min-h-screen flex flex-col bg-gray-50">

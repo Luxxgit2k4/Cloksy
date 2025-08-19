@@ -2,7 +2,8 @@ import React from "react";
 // importing button component from pre built shadcn components
 import { Button } from "@/components/ui/button";
 // importing logo 
-import { Logo } from "./Logo"
+import { Logo } from "./icon"
+import { Link } from 'react-router-dom'
 
 // Header component 
 export const Header = () => {
@@ -20,7 +21,11 @@ export const Header = () => {
 
 {/* Button section */}
 <div className="flex items-center space-x-4">
-    <Button variant="ghost" className="text-[6B7280]">Log In</Button>
+  <Button variant="ghost" asChild>
+  <Link to="/login" className="text-gray-500">Log In</Link>
+</Button>
+  <Button className="bg-[#4F46E5] hover:bg-[#4338CA] cursor-pointer" asChild><Link to="/signup">Sign Up</Link></Button>
+  
 </div>
         </header>
     );
