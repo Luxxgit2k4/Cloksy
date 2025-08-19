@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button"
+import { LandingHeader } from "@/components/LandingHeader";
 
 function App() {
    return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <Button>
-        shadcn/ui is working!
-      </Button>
+    <div className="bg-gray-50">
+    <LandingHeader />
     </div>
   )
 }
