@@ -1,6 +1,8 @@
 import React from "react";
 // importing button component from pre built shadcn components
 import { Button } from "@/components/ui/button";
+// importing logo 
+import { Logo } from "./icon";
 
 // Header component 
 export const LandingHeader = () => {
@@ -9,7 +11,7 @@ export const LandingHeader = () => {
         <header className="w-full bg-white py-4 px-6 md:px-10 flex items-center border-b">
 {/* Logo and Name section */ }
 <div className="flex items-center space-x-2" > 
-<div className="w-8 h-8 bg-blue-600 rounded-md"></div>
+<Logo className="w-8 h-8" />
 <span className="text-2xl font-bold">Cloksy</span>
 </div> 
 
