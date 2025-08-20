@@ -26,7 +26,7 @@ export const Profile = () => {
       const userData = JSON.parse(storedData); // Converting string data to array of objects
       userData.displayName = displayName; // adding new key and value E.g. displayName = "Lakshmanan"
       localStorage.setItem('user', JSON.stringify(userData)); // Setting it to local storage by converting it into strings
-      navigate('/'); 
+      navigate('/timesheet'); 
     } else {
       alert("An error occurred. Please sign up again.");
       navigate('/signup');
