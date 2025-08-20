@@ -30,7 +30,7 @@ export const SignIn = () => {
 
         userData.role = role;
         localStorage.setItem('user', JSON.stringify(userData));
-        navigate('/');
+        navigate('/timesheet');
       } else {
         alert("Invalid Email or Password. Try Again !");
       }
