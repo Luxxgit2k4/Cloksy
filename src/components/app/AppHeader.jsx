@@ -13,12 +13,12 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const AppHeader = () => {
+export const AppHeader = ({ user }) => {
   // Mock user data: normally fetched from Local Storage or API
-  const user = {
-    displayName: "Lakshmanan",
-    role: "Employee",
-  };
+//   const user = {
+//     displayName: "Lakshmanan",
+//     role: "Employee",
+//   };
 
   const navigate = useNavigate(); 
   const location = useLocation();
@@ -28,6 +28,10 @@ export const AppHeader = () => {
     console.log("Signing out...");
     navigate('/');
   };
+
+  if (!user) {
+    return null;
+  }
 
   return (
     // Main header bar

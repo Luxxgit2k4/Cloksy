@@ -1,15 +1,23 @@
 import React from 'react';
 import { AppHeader } from './AppHeader';
 import { Hero } from './hero';
+import { useState, useEffect } from 'react';
 
-// This component's only job is to assemble the main app layout.
+// Timesheet component by assembling all the components 
 export const Timesheet = () => {
-  return (
+  const [user, setUser] = useState(null);
+      useEffect(() => { 
+    // This loads all our data when the app starts from the local storage
+    const storedUser = localStorage.getItem('user'); // Getting user details from local storage string 
+    if (storedUser) { setUser(JSON.parse(storedUser)); }
+  }, []);
+
+
+   return (
     <div>
-      <AppHeader />
+      <AppHeader user={user} />
       <main className="container mx-auto p-4 md:p-6">
-        {/* For now, we will just show the TimesheetsPage. */}
-        {/* Later, we can add routing here to switch between Timesheets and Reports. */}
+
         <Hero />
       </main>
     </div>

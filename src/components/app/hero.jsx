@@ -63,15 +63,12 @@ export const Hero = () => {
         <CardHeader>
           <CardTitle>Time Entries</CardTitle>
         </CardHeader>
-        {/* Card content */}
-        {/*  content for empty state */}
+        {/* Card content for empty state */}
         <CardContent className="text-center text-gray-500 py-16">
-          {/* Icon representing no entries */}
           <Calendar className="mx-auto h-12 w-12 text-gray-400" />
-          {/* Message when no entries exist */}
           <p className="text-black font-semibold mt-4">No time entries found</p>
           <p className="text-sm mt-1">Start by logging your first time entry</p>
-          {/* Action button to add a new time entry */}
+          {/* Button to enter log */}
           <Button className="mt-4 bg-[#4F46E5]  hover:bg-[#4338CA]">+ Add New Entry</Button>
         </CardContent>
       </Card>
