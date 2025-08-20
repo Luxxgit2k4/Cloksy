@@ -10,6 +10,9 @@ export const Timesheet = () => {
   const [timeEntries, setTimeEntries] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+   // This new state will remember which entry we are currently editing.
+  const [editingEntry, setEditingEntry] = useState(null); 
+
       useEffect(() => { 
     // This loads all our data when the app starts from the local storage
     const storedData = localStorage.getItem('user'); // Getting user details from local storage string 
@@ -19,25 +22,64 @@ export const Timesheet = () => {
     if (storedEntries) { setTimeEntries(JSON.parse(storedEntries)); }
   }, []);
 
-  const handleAddTimeEntry = (newEntry) => {
-    const updatedEntries = [...timeEntries, newEntry];
+  // save the updated list to state and Local Storage.
+  const saveEntries = (updatedEntries) => {
     setTimeEntries(updatedEntries);
     localStorage.setItem('timeEntries', JSON.stringify(updatedEntries));
-    setIsModalOpen(false); // Close the modal after saving
+  };
+
+   const handleSaveEntry = (entryData) => {
+    if (editingEntry) { // If we are in "edit mode"...
+      // We use .map() to find the entry with the matching ID and replace it.
+      const updatedEntries = timeEntries.map(entry => 
+        entry.id === editingEntry.id ? { ...entry, ...entryData } : entry
+      );
+      saveEntries(updatedEntries);
+    } else { // If we are adding a new entry...
+      const newEntry = { ...entryData, id: Date.now(), status: 'Pending' };
+      saveEntries([...timeEntries, newEntry]);
+    }
+    // We close the modal and reset the editing state.
+    setIsModalOpen(false);
+    setEditingEntry(null);
+  };
+
+  const handleDeleteEntry = (entryId) => {
+    // A confirmation box to prevent accidental deletion.
+    if (window.confirm("Are you sure you want to delete this entry?")) {
+      // We use .filter() to create a new array that includes every entry EXCEPT the one with the matching ID.
+      const updatedEntries = timeEntries.filter(entry => entry.id !== entryId);
+      saveEntries(updatedEntries);
+    }
+  };
+
+  const handleOpenEditModal = (entry) => {
+    setEditingEntry(entry);
+    setIsModalOpen(true);
+  };
+
+  // This new function opens the modal for adding a new entry.
+  const handleOpenAddModal = () => {
+    setEditingEntry(null); // We make sure we are not in edit mode.
+    setIsModalOpen(true);
   };
 
    return (
     <div>
-      <AppHeader user={user} onAddNewEntry={() => setIsModalOpen(true)} />
+      <AppHeader user={user} onAddNewEntry={handleOpenAddModal} />
       <main className="container mx-auto p-4 md:p-6">
 
-        <Hero  timeEntries={timeEntries} 
-          onAddNewEntry={() => setIsModalOpen(true)} />
-      </main>
+       <Hero 
+          timeEntries={timeEntries} 
+          onAddNewEntry={handleOpenAddModal}
+          onEditEntry={handleOpenEditModal}
+          onDeleteEntry={handleDeleteEntry} 
+        /> </main>
       {isModalOpen && (
         <LogTimeModal 
-          onSave={handleAddTimeEntry} 
+         onSave={handleSaveEntry} 
           onClose={() => setIsModalOpen(false)} 
+          existingEntry={editingEntry}
         />
       )}
     </div>

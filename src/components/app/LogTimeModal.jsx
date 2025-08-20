@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -9,8 +9,10 @@ import { Label } from "@/components/ui/label"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Textarea } from "@/components/ui/textarea"
 import { Switch } from "@/components/ui/switch"
+import { useState, useEffect } from 'react'
 
-export const LogTimeModal = ({ onSave, onClose }) => {
+
+export const LogTimeModal = ({ onSave, onClose, existingEntry }) => {
   // keeping track of all the form stuff
   const [date, setDate] = useState(new Date())
   const [project, setProject] = useState('')
@@ -21,13 +23,36 @@ export const LogTimeModal = ({ onSave, onClose }) => {
   const [overtimeMinutes, setOvertimeMinutes] = useState(0)
   const [isBillable, setIsBillable] = useState(false)
 
+// This `useEffect` hook watches for changes to the `existingEntry` prop
+  useEffect(() => {
+    if (existingEntry) {
+      setDate(new Date(existingEntry.date));
+      setProject(existingEntry.project);
+      setDescription(existingEntry.description);
+      setStartTime(existingEntry.startTime);
+      setEndTime(existingEntry.endTime);
+      setBreakMinutes(existingEntry.breakMinutes || 0);
+      setOvertimeMinutes(existingEntry.overtimeMinutes || 0);
+      setIsBillable(existingEntry.isBillable || false);
+    } else {
+      // If we are adding a new entry, reset the form to be empty.
+      setDate(new Date());
+      setProject('');
+      setDescription('');
+      setStartTime('');
+      setEndTime('');
+      setBreakMinutes(0);
+      setOvertimeMinutes(0);
+      setIsBillable(false);
+    }
+  }, [existingEntry]);
   // handle saving the form
   const handleSave = () => {
     if (!project || !startTime  || !date) {
       alert('Please fill the required fields')
       return
     }
-    const newEntry = {
+    const entryData = {
       id: Date.now(),
       date: date.toISOString(),
       project,
@@ -39,7 +64,7 @@ export const LogTimeModal = ({ onSave, onClose }) => {
       isBillable,
       status: 'Pending'
     }
-    onSave(newEntry)
+    onSave(entryData)
   }
   return (
     <Dialog open onOpenChange={onClose}>
@@ -48,7 +73,7 @@ export const LogTimeModal = ({ onSave, onClose }) => {
         
         {/* header with title and description */}
         <DialogHeader className="p-6 pb-4">
-          <DialogTitle className="text-2xl">Log time entry</DialogTitle>
+          <DialogTitle className="text-2xl">{existingEntry ? "Edit Time Entry" : "Log Time Entry"}</DialogTitle>
           <DialogDescription>
             Fill in the details for your time entry and hit save when done
           </DialogDescription>
@@ -133,7 +158,7 @@ export const LogTimeModal = ({ onSave, onClose }) => {
         {/* footer with cancel and save buttons */}
         <DialogFooter className="p-6 pt-4 border-t">
           <Button variant="ghost" onClick={onClose}>Cancel</Button>
-          <Button onClick={handleSave}>Save entry</Button>
+          <Button onClick={handleSave}>{existingEntry ? "Save Changes" : "Save Entry"}</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
