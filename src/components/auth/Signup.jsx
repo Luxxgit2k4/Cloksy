@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -6,11 +6,29 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Logo, GoogleIcon } from "@/components/Landing_page/icon";
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom'; // importing useNavigate hook
 import { ArrowLeft } from "lucide-react";
 
 // source: https://ui.shadcn.com/docs/components/card
 // Sign-up page component
 export const SignUpPage = () => {
+
+  const navigate = useNavigate(); // calling the hook and accessing the navigation
+  const [email, setEmail] = useState(''); // State variable to update the state of email when the user enters
+  const [password, setPassword] = useState('');
+  const [role, setRole] = useState(''); 
+
+  const handleSignUp = () => {  // This runs when Create account button is clicked
+    if (!email || !password || !role) {  // alerts the user when clicking without filling any fields 
+      alert("Please fill in all fields.");
+      return;
+    }
+    const user = { email, password, role }; // Creating an array of objects to store data
+    localStorage.setItem('user', JSON.stringify(user)); // Converting object to string to store in local storage
+    
+    navigate('/profile-setup'); // navigates to profile setup page
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
       
@@ -42,19 +60,21 @@ export const SignUpPage = () => {
             {/* Email container*/}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
-              <Input id="email" type="email" placeholder="Enter your email" required />
+              {/* When the email is entered the state is updated*/}
+              <Input id="email" type="email" placeholder="Enter your email" required value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
 
             {/* Password container */}
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
-              <Input id="password" type="password" placeholder="Create a password" required />
+              {/* When the password is entered the state is updated*/}
+              <Input id="password" type="password" placeholder="Create a password" required value={password} onChange={(e) => setPassword(e.target.value)} />
             </div>
 
             {/* Dropdown for selecting role*/}
             <div className="space-y-2">
               <Label htmlFor="role">Sign up as</Label>
-              <Select>
+              <Select onValueChange={setRole}> {/* in built function in Select shadcn component used to update the state */}
                 <SelectTrigger id="role">
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
@@ -67,7 +87,7 @@ export const SignUpPage = () => {
           </div>
 
           {/* Submit button */}
-          <Button className="w-full mt-6 bg-[#4F46E5]  hover:bg-[#4338CA]" asChild><Link to="/profile-setup">Create Account</Link></Button>
+          <Button className="w-full mt-6 bg-[#453ece]  hover:bg-[#4338CA] cursor-pointer" onClick={handleSignUp}>Create Account</Button>
           
           {/* continue with container */}
           <div className="relative my-6">
@@ -82,7 +102,7 @@ export const SignUpPage = () => {
           </div>
 
           {/* Google authentication static button */}
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full cursor-pointer">
             <div className="flex items-center justify-center gap-2">
             <GoogleIcon className="w-5 h-5" />
             <span>Continue with Google</span>
