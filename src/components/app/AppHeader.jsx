@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export const AppHeader = ({ user }) => {
+export const AppHeader = ({ user, onAddNewEntry }) => {
   // Mock user data: normally fetched from Local Storage or API
 //   const user = {
 //     displayName: "Lakshmanan",
@@ -71,7 +71,7 @@ export const AppHeader = ({ user }) => {
         <div className="flex items-center gap-4">
           
           {/* Quick action button */}
-          <Button className="bg-[#4F46E5]  hover:bg-[#4338CA]">+ Entries</Button>
+          <Button className="bg-[#4F46E5]  hover:bg-[#4338CA]" onClick={onAddNewEntry}>+ Entries</Button>
 
           {/* User profile dropdown */}
          <DropdownMenu>

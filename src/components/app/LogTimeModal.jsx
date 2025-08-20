@@ -1,0 +1,141 @@
+import React, { useState } from 'react'
+import { format } from "date-fns"
+import { Calendar as CalendarIcon } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Calendar } from "@/components/ui/calendar"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Textarea } from "@/components/ui/textarea"
+import { Switch } from "@/components/ui/switch"
+
+export const LogTimeModal = ({ onSave, onClose }) => {
+  // keeping track of all the form stuff
+  const [date, setDate] = useState(new Date())
+  const [project, setProject] = useState('')
+  const [description, setDescription] = useState('')
+  const [startTime, setStartTime] = useState('')
+  const [endTime, setEndTime] = useState('')
+  const [breakMinutes, setBreakMinutes] = useState(0)
+  const [overtimeMinutes, setOvertimeMinutes] = useState(0)
+  const [isBillable, setIsBillable] = useState(false)
+
+  // handle saving the form
+  const handleSave = () => {
+    if (!project || !startTime  || !date) {
+      alert('Please fill the required fields')
+      return
+    }
+    const newEntry = {
+      id: Date.now(),
+      date: date.toISOString(),
+      project,
+      description,
+      startTime,
+      endTime,
+      breakMinutes,
+      overtimeMinutes,
+      isBillable,
+      status: 'Pending'
+    }
+    onSave(newEntry)
+  }
+  return (
+    <Dialog open onOpenChange={onClose}>
+      {/* modal content with fixed header and footer, scrollable middle */}
+      <DialogContent className="sm:max-w-lg grid-rows-[auto_minmax(0,1fr)_auto] p-0 max-h-[90vh]">
+        
+        {/* header with title and description */}
+        <DialogHeader className="p-6 pb-4">
+          <DialogTitle className="text-2xl">Log time entry</DialogTitle>
+          <DialogDescription>
+            Fill in the details for your time entry and hit save when done
+          </DialogDescription>
+        </DialogHeader>
+
+        {/* form fields container, scrolls if too tall */}
+        <div className="space-y-4 px-6 overflow-y-auto">
+          {/* date picker with popover calendar */}
+          <div className="space-y-2">
+            <Label htmlFor="date">Date*</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button variant="outline" className="w-full justify-start text-left font-normal">
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {date ? format(date, "PPP") : <span>pick a date</span>}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0">
+                <Calendar mode="single" selected={date} onSelect={setDate} initialFocus />
+              </PopoverContent>
+            </Popover>
+          </div>
+
+          {/* project input */}
+          <div className="space-y-2">
+            <Label htmlFor="project">Project*</Label>
+            <Input id="project" value={project} onChange={(e) => setProject(e.target.value)} />
+          </div>
+
+          {/* description textarea */}
+          <div className="space-y-2">
+            <Label htmlFor="description">Task description*</Label>
+            <Textarea
+              id="description"
+              placeholder="what have you worked on"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          </div>
+
+          {/* start and end time side by side on medium screens */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="startTime">Start time*</Label>
+              <Input id="startTime" type="time" value={startTime} onChange={(e) => setStartTime(e.target.value)} />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="endTime">End time</Label>
+              <Input id="endTime" type="time" value={endTime} onChange={(e) => setEndTime(e.target.value)} />
+            </div>
+          </div>
+
+          {/* break and overtime inputs */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <Label htmlFor="break">Break in (mins)</Label>
+              <Input
+                id="break"
+                type="number"
+                value={breakMinutes}
+                onChange={(e) => setBreakMinutes(parseInt(e.target.value, 10) || 0)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="overtime">Overtime in (mins)</Label>
+              <Input
+                id="overtime"
+                type="number"
+                value={overtimeMinutes}
+                onChange={(e) => setOvertimeMinutes(parseInt(e.target.value, 10) || 0)}
+              />
+            </div>
+          </div>
+
+          {/* toggle for billable */}
+          <div className="flex items-center justify-between pt-2">
+            <Label htmlFor="billable" className="text-base">Billable</Label>
+            <Switch id="billable" checked={isBillable} onCheckedChange={setIsBillable}  />
+          </div>
+        </div>
+
+        {/* footer with cancel and save buttons */}
+        <DialogFooter className="p-6 pt-4 border-t">
+          <Button variant="ghost" onClick={onClose}>Cancel</Button>
+          <Button onClick={handleSave}>Save entry</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  )
+}

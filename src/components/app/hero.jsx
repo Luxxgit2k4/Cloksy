@@ -6,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from 'lucide-react'; 
 
 export const Hero = () => {
+// hero component for timesheet page
+export const Hero = ({ timeEntries, onAddNewEntry }) => {
   return (
     // Main page container
     <div className="space-y-6">
@@ -70,6 +72,7 @@ export const Hero = () => {
           <p className="text-sm mt-1">Start by logging your first time entry</p>
           {/* Button to enter log */}
           <Button className="mt-4 bg-[#4F46E5]  hover:bg-[#4338CA]">+ Add New Entry</Button>
+          <Button className="mt-4 bg-[#4F46E5]  hover:bg-[#4338CA]" onClick={onAddNewEntry}>+ Add New Entry</Button>
         </CardContent>
       </Card>
 
