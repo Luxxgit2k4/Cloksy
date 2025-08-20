@@ -13,6 +13,10 @@ export const Timesheet = () => {
    // This new state will remember which entry we are currently editing.
   const [editingEntry, setEditingEntry] = useState(null); 
 
+  // State for filters 
+    const [searchTerm, setSearchTerm] = useState('');
+  const [statusFilter, setStatusFilter] = useState('All');
+
       useEffect(() => { 
     // This loads all our data when the app starts from the local storage
     const storedData = localStorage.getItem('user'); // Getting user details from local storage string 
@@ -83,6 +87,10 @@ export const Timesheet = () => {
           onEditEntry={handleOpenEditModal}
           onDeleteEntry={handleDeleteEntry} 
           onUpdateStatus={handleUpdateStatus}
+          searchTerm={searchTerm}
+          setSearchTerm={setSearchTerm}
+          statusFilter={statusFilter}
+          setStatusFilter={setStatusFilter}
         /> </main>
       {isModalOpen && (
         <LogTimeModal 
