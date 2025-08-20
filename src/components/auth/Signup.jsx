@@ -25,6 +25,7 @@ export const SignUpPage = () => {
         
         {/* Card Header */}
         <CardHeader className=" relative text-center">
+          {/* Navigate back to landing page link using arrow back icon */}
            <Link to="/" className="absolute top-0 left-6 text-gray-500 hover:text-gray-800 transition-colors">
     <ArrowLeft size={24} />
   </Link>
@@ -68,7 +69,7 @@ export const SignUpPage = () => {
           {/* Submit button */}
           <Button className="w-full mt-6 bg-[#4F46E5]  hover:bg-[#4338CA] ">Create Account</Button>
           
-          {/* Divider with "Or continue with" */}
+          {/* continue with container */}
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t" />
