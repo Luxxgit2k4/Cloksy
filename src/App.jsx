@@ -3,6 +3,7 @@ import { Routes, Route} from 'react-router-dom';
 import { LandingPage } from "./components/Landing_page/LandingPage";
 import { SignUpPage } from "./components/auth/Signup";
 import { SignIn} from "./components/auth/SignIn"
+import { Profile } from "./components/auth/Profile"
 function App() {
    return (
     // routes consist of all the paths or address to be made for navigation
@@ -12,6 +13,7 @@ function App() {
       <Route path="/" element={<LandingPage />} /> 
       <Route path="/signup" element={<SignUpPage />} />
       <Route path="/login" element={<SignIn />} />
+      <Route path="/profile-setup" element={<Profile />} />
       
     </Routes>
   )

@@ -67,7 +67,7 @@ export const SignUpPage = () => {
           </div>
 
           {/* Submit button */}
-          <Button className="w-full mt-6 bg-[#4F46E5]  hover:bg-[#4338CA] ">Create Account</Button>
+          <Button className="w-full mt-6 bg-[#4F46E5]  hover:bg-[#4338CA]" asChild><Link to="/profile-setup">Create Account</Link></Button>
           
           {/* continue with container */}
           <div className="relative my-6">
