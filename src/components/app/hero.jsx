@@ -7,11 +7,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Search, Trash2, Edit, CheckCircle, XCircle, Calendar } from 'lucide-react'; 
+import { isToday, isThisWeek, isThisMonth } from 'date-fns';
+
 // hero component for timesheet page
 export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDeleteEntry,  onUpdateStatus, searchTerm,
   setSearchTerm,
   statusFilter,
-  setStatusFilter }) => {
+  setStatusFilter,
+  dateFilter,
+  setDateFilter }) => {
 
   const calculateWorkingHours = (entry) => {
     if (!entry.startTime || !entry.endTime) return { hours: 0, minutes: 0, totalMinutes: 0 };
@@ -52,10 +56,25 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
 
     // creating a new array called `filteredEntries` that will display in the table.
    const filteredEntries = timeEntries.filter(entry => {
+     const entryDate = new Date(entry.date);
+
+       // Date filter logic
+    let dateMatch = false;
+    if (dateFilter === 'All Time') {
+      dateMatch = true;
+    } else if (dateFilter === 'Today') {
+      dateMatch = isToday(entryDate);
+    } else if (dateFilter === 'This Week') {
+      // weekStartsOn: 1 makes the week start on Monday
+      dateMatch = isThisWeek(entryDate, { weekStartsOn: 1 }); 
+    } else if (dateFilter === 'This Month') {
+      dateMatch = isThisMonth(entryDate);
+    }
+    // Search filter logic
     const searchMatch = entry.project.toLowerCase().includes(searchTerm.toLowerCase()) ||
                         entry.description.toLowerCase().includes(searchTerm.toLowerCase());
     const statusMatch = statusFilter === 'All' || entry.status === statusFilter;
-    return searchMatch && statusMatch;
+    return dateMatch && searchMatch && statusMatch;
   });
 
     return (
@@ -114,7 +133,7 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
    <Card>
         <CardHeader>
           <CardTitle>Time Entries</CardTitle>
-          {/* This text will now correctly show the count of visible (filtered) entries */}
+          {/* This text will now correctly show the count of visible filtered entries */}
           <p className="text-sm text-gray-500">Showing {filteredEntries.length} of {timeEntries.length} entries</p>
         </CardHeader>
         <CardContent>
@@ -128,6 +147,17 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
             </div>
+             <Select value={dateFilter} onValueChange={setDateFilter}>
+                <SelectTrigger className="w-full md:w-auto">
+                  <SelectValue placeholder="Select period" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All Time">All Time</SelectItem>
+                  <SelectItem value="Today">Today</SelectItem>
+                  <SelectItem value="This Week">This Week</SelectItem>
+                  <SelectItem value="This Month">This Month</SelectItem>
+                </SelectContent>
+              </Select>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full md:w-auto"><SelectValue placeholder="Status" /></SelectTrigger>
               <SelectContent>
@@ -153,7 +183,9 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
                     <TableRow>
                       <TableHead>Date</TableHead>
                       <TableHead>Project</TableHead>
+                      <TableHead>Task</TableHead>
                       <TableHead>Working hours</TableHead>
+                      <TableHead>Billable</TableHead>
                       <TableHead>Status</TableHead>
                       <TableHead className="text-right">Action</TableHead>
                     </TableRow>
@@ -164,9 +196,15 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
                       const duration = calculateWorkingHours(entry);
                       return (
                         <TableRow key={entry.id}>
-                          <TableCell>{new Date(entry.date).toLocaleDateString('en-GB')}</TableCell>
+                          <TableCell>{new Date(entry.date).toLocaleDateString('en-GB')}</TableCell>                         
                           <TableCell className="font-medium">{entry.project}</TableCell>
+                          <TableCell>{entry.description}</TableCell>
                           <TableCell>{`${duration.hours}h ${duration.minutes}m`}</TableCell>
+                          <TableCell>
+                          <Badge className={entry.isBillable ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-800'}>
+                            {entry.isBillable ? 'Billable' : 'Non-Billable'}
+                          </Badge>
+                        </TableCell>
                           <TableCell><Badge className={entry.status === 'Approved' ? 'bg-green-100 text-green-800' : entry.status === 'Rejected' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'}>{entry.status}</Badge></TableCell>
                           <TableCell className="text-right">
                             <div className="flex items-center justify-end gap-1">

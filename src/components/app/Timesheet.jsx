@@ -16,6 +16,7 @@ export const Timesheet = () => {
   // State for filters 
     const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('All');
+  const [dateFilter, setDateFilter] = useState('All Time');
 
       useEffect(() => { 
     // This loads all our data when the app starts from the local storage
@@ -91,6 +92,8 @@ export const Timesheet = () => {
           setSearchTerm={setSearchTerm}
           statusFilter={statusFilter}
           setStatusFilter={setStatusFilter}
+           dateFilter={dateFilter}
+          setDateFilter={setDateFilter}
         /> </main>
       {isModalOpen && (
         <LogTimeModal 
