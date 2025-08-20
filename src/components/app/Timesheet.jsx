@@ -53,6 +53,13 @@ export const Timesheet = () => {
     }
   };
 
+  const handleUpdateStatus = (entryId, newStatus) => {
+    const updatedEntries = timeEntries.map(entry => 
+      entry.id === entryId ? { ...entry, status: newStatus } : entry
+    );
+    saveEntries(updatedEntries);
+  };
+
   const handleOpenEditModal = (entry) => {
     setEditingEntry(entry);
     setIsModalOpen(true);
@@ -70,10 +77,12 @@ export const Timesheet = () => {
       <main className="container mx-auto p-4 md:p-6">
 
        <Hero 
+          user={user}
           timeEntries={timeEntries} 
           onAddNewEntry={handleOpenAddModal}
           onEditEntry={handleOpenEditModal}
           onDeleteEntry={handleDeleteEntry} 
+          onUpdateStatus={handleUpdateStatus}
         /> </main>
       {isModalOpen && (
         <LogTimeModal 

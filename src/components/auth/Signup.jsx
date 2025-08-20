@@ -79,8 +79,8 @@ export const SignUpPage = () => {
                   <SelectValue placeholder="Select your role" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="employee">Employee</SelectItem>
-                  <SelectItem value="manager">Manager</SelectItem>
+                  <SelectItem value="Employee">Employee</SelectItem>
+                  <SelectItem value="Manager">Manager</SelectItem>
                 </SelectContent>
               </Select>
             </div>

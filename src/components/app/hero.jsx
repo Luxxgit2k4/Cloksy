@@ -6,10 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { MoreHorizontal, Search, Trash2, Edit } from 'lucide-react'; 
-import { Calendar } from 'lucide-react'; 
+import { Search, Trash2, Edit, CheckCircle, XCircle, Calendar } from 'lucide-react'; 
 // hero component for timesheet page
-export const Hero = ({ timeEntries=[], onAddNewEntry, onEditEntry, onDeleteEntry }) => {
+export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDeleteEntry,  onUpdateStatus }) => {
 
   const calculateWorkingHours = (entry) => {
     if (!entry.startTime || !entry.endTime) return { hours: 0, minutes: 0, totalMinutes: 0 };
@@ -172,6 +171,19 @@ export const Hero = ({ timeEntries=[], onAddNewEntry, onEditEntry, onDeleteEntry
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex items-center justify-end gap-1">
+                            {user?.role === 'Manager' && entry.status === 'Pending' && (
+                            <>
+                              {/* If both are true, we show the Approve button */}
+                              <Button variant="ghost" size="icon" onClick={() => onUpdateStatus(entry.id, 'Approved')}>
+                                <CheckCircle className="h-4 w-4 text-green-500" />
+                              </Button>
+                              {/* And the Reject button */}
+                              <Button variant="ghost" size="icon" onClick={() => onUpdateStatus(entry.id, 'Rejected')}>
+                                <XCircle className="h-4 w-4 text-red-500" />
+                              </Button>
+                            </>
+                          )}
+
                             <Button variant="ghost" size="icon" onClick={() => onEditEntry(entry)}>
                               <Edit className="h-4 w-4" />
                             </Button>
