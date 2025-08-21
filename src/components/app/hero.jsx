@@ -39,6 +39,32 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
     return { hours, minutes, totalMinutes };
   };
 
+   // This is our new function to handle the CSV export using browser APIs.
+  const handleExportCSV = () => {
+ const headers = "Date,Project,Task,Working Hours,Billable,Status";
+ const csvRows = filteredEntries.map(entry => {
+      const duration = calculateWorkingHours(entry);
+      const row = [
+        new Date(entry.date).toLocaleDateString('en-GB'),
+        `"${entry.project.replace(/"/g, '""')}"`,
+        `"${entry.description.replace(/"/g, '""')}"`, // Handle commas in description
+        `${duration.hours}h ${duration.minutes}m`,
+        entry.isBillable ? 'Yes' : 'No',
+        entry.status
+      ];
+      return row.join(','); // Join the items with a comma
+    });
+    const csvString = [headers, ...csvRows].join('\n')
+    const blob = new Blob([csvString], { type: 'text/csv' });
+
+      const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'cloksy_timesheet_export.csv';
+     document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+  
   const totalMinutes = timeEntries.reduce((acc, entry) => {
     return acc + calculateWorkingHours(entry).totalMinutes;
   }, 0);
@@ -92,22 +118,22 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
         </div>
       </div>
 
-      {/* Grid layout for the summary cards */}
+      {/* grid layout for the summary cards */}
       <div className="grid gap-4 md:grid-cols-3">
 
-        {/* Total Hours Card */}
+        {/* total Hours Card */}
         <Card>
-          {/* Card header */}
+          {/* card header */}
           <CardHeader>
             <CardTitle>Total Hours</CardTitle>
           </CardHeader>
-          {/* Card content  */}
+          {/* card content  */}
           <CardContent>
             <div className="text-3xl font-bold">{totalHours}h</div>
           </CardContent>
         </Card>
 
-        {/* Billable Hours Card */}
+        {/* billable Hours Card */}
         <Card>
           <CardHeader>
             <CardTitle>Billable Hours</CardTitle>
@@ -117,7 +143,7 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
           </CardContent>
         </Card>
 
-        {/* Pending Approval Card */}
+        {/* pending Approval Card */}
         <Card>
           <CardHeader>
             <CardTitle>Pending Approval</CardTitle>
@@ -128,12 +154,12 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
         </Card>
       </div>
 
-      {/* Time Entries List Section */}
-      {/* Main card container for the list of time entries */}
+      {/* time Entries List Section */}
+      {/* main card container for the list of time entries */}
    <Card>
         <CardHeader>
           <CardTitle>Time Entries</CardTitle>
-          {/* This text will now correctly show the count of visible filtered entries */}
+          {/* this text will now correctly show the count of visible filtered entries */}
           <p className="text-sm text-gray-500">Showing {filteredEntries.length} of {timeEntries.length} entries</p>
         </CardHeader>
         <CardContent>
@@ -161,7 +187,7 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
             <Select value={statusFilter} onValueChange={setStatusFilter}>
               <SelectTrigger className="w-full md:w-auto"><SelectValue placeholder="Status" /></SelectTrigger>
               <SelectContent>
-                <SelectItem value="All">All Statuses</SelectItem>
+                <SelectItem value="All">All Status</SelectItem>
                 <SelectItem value="Pending">Pending</SelectItem>
                 <SelectItem value="Approved">Approved</SelectItem>
                 <SelectItem value="Rejected">Rejected</SelectItem>
@@ -187,11 +213,11 @@ export const Hero = ({  user, timeEntries=[], onAddNewEntry, onEditEntry, onDele
                       <TableHead>Working hours</TableHead>
                       <TableHead>Billable</TableHead>
                       <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Action</TableHead>
+                      <TableHead className="text-center">Action</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {/* The table maps over the `filteredEntries` array */}
+                    {/* the table maps over the filteredEntries array */}
                     {filteredEntries.map((entry) => {
                       const duration = calculateWorkingHours(entry);
                       return (

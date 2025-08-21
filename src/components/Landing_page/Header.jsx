@@ -22,9 +22,9 @@ export const Header = () => {
 {/* Button section */}
 <div className="flex items-center space-x-4">
   <Button variant="ghost" asChild>
-  <Link to="/login" className="text-gray-500">Log In</Link>
+  <Link to="/login" className="text-gray-500 transition-transform active:scale-95">Log In</Link>
 </Button>
-  <Button className="bg-[#4F46E5] hover:bg-[#4338CA] cursor-pointer" asChild><Link to="/signup">Sign Up</Link></Button>
+  <Button className="bg-[#4F46E5] hover:bg-[#4338CA] cursor-pointer transition-transform active:scale-95" asChild><Link to="/signup">Sign Up</Link></Button>
   
 </div>
         </header>

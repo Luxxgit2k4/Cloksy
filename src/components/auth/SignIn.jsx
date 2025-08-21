@@ -9,7 +9,7 @@ import { Logo, GoogleIcon } from "@/components/Landing_page/icon";
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
+import toast from 'react-hot-toast';
 // Sign in component 
 export const SignIn = () => {
 
@@ -20,7 +20,7 @@ export const SignIn = () => {
 
   const handleSignIn = () => {
     if (!email || !password) {  // alerts the user when clicking without filling any fields 
-      alert("Please fill in all fields.");
+      toast.error("Please fill in all fields.");
       return;
     }
     const storedData = localStorage.getItem('user');
@@ -30,9 +30,10 @@ export const SignIn = () => {
 
         userData.role = role;
         localStorage.setItem('user', JSON.stringify(userData));
-        navigate('/timesheet');
+        navigate('/dashboard');
+        toast.success("Logged in successfully !")
       } else {
-        alert("Invalid Email or Password. Try Again !");
+        toast.error("Invalid Email or Password. Try Again !");
       }
     } 
   };

@@ -17,8 +17,8 @@ export const Hero = () => {
        
         {/* Buttons container centered */}
        <div className="mt-8 flex justify-center gap-4">
-       <Button size="lg" className="bg-[#4F46E5] hover:bg-[#4338CA]" asChild><Link to="/signup">Get Started Free</Link></Button>
-        <Button size="lg" variant="outline" className="text-[#4F46E5]" asChild><Link to="/login">Sign In</Link></Button>
+       <Button size="lg" className="bg-[#4F46E5] hover:bg-[#4338CA] transition-transform active:scale-95" asChild><Link to="/signup">Get Started Free</Link></Button>
+        <Button size="lg" variant="outline" className="text-[#4F46E5] transition-transform active:scale-95" asChild><Link to="/login">Sign In</Link></Button>
        </div>
         </section>
 

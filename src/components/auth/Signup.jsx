@@ -8,6 +8,7 @@ import { Logo, GoogleIcon } from "@/components/Landing_page/icon";
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom'; // importing useNavigate hook
 import { ArrowLeft } from "lucide-react";
+import toast from 'react-hot-toast';
 
 // source: https://ui.shadcn.com/docs/components/card
 // Sign-up page component
@@ -20,7 +21,7 @@ export const SignUpPage = () => {
 
   const handleSignUp = () => {  // This runs when Create account button is clicked
     if (!email || !password || !role) {  // alerts the user when clicking without filling any fields 
-      alert("Please fill in all fields.");
+      toast("Please fill in all fields.");
       return;
     }
     const user = { email, password, role }; // Creating an array of objects to store data

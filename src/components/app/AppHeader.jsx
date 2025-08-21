@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, NavLink, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/Landing_page/icon";
 
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const AppHeader = ({ user, onAddNewEntry }) => {
-  // Mock user data: normally fetched from Local Storage or API
+ 
 //   const user = {
 //     displayName: "Lakshmanan",
 //     role: "Employee",
@@ -23,7 +23,7 @@ export const AppHeader = ({ user, onAddNewEntry }) => {
   const navigate = useNavigate(); 
   const location = useLocation();
 
-  // Sign out handler: clear session & navigate to landing page
+  // sign out handler clear session & navigate to landing page
   const singout = () => {
     console.log("Signing out...");
     navigate('/');
@@ -40,7 +40,7 @@ export const AppHeader = ({ user, onAddNewEntry }) => {
       {/* Header container */}
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         
-        {/* Left section: Logo and main navigation */}
+        {/* left Logo and main navigation */}
         <div className="flex items-center gap-6">
           
           {/* Logo and App name container */}
@@ -52,18 +52,19 @@ export const AppHeader = ({ user, onAddNewEntry }) => {
           {/* Desktop navigation, hidden on mobile shown on screens >768px */}
           <nav className="hidden md:flex items-center space-x-4">
             {/* Condition to highlight current active nav bar using location hook*/}
-  <Link
-    to="/timesheet"
-    className={location.pathname === '/timesheet' ? 'font-semibold' : 'font-normal'}
-  >
-    Timesheets
-  </Link>
-  <Link
-    to="/reports"
-    className={location.pathname === '/reports' ? 'font-semibold' : 'font-normal'}
-  >
-    Reports
-  </Link>
+              <NavLink 
+              to="/dashboard"  
+              end // The `end` prop is important for the main dashboard link
+              className={({ isActive }) => isActive ? "font-semibold text-blue-600" : "font-normal text-gray-500"}
+            >
+              Timesheets
+            </NavLink>
+            <NavLink 
+              to="/dashboard/reports" 
+              className={({ isActive }) => isActive ? "font-semibold text-blue-600" : "font-normal text-gray-500"}
+            >
+              Reports
+            </NavLink>
 </nav>
 </div>
         
@@ -71,13 +72,14 @@ export const AppHeader = ({ user, onAddNewEntry }) => {
         <div className="flex items-center gap-4">
           
           {/* Quick action button */}
-          <Button className="bg-[#4F46E5]  hover:bg-[#4338CA]" onClick={onAddNewEntry}>+ Entries</Button>
-
+          {location.pathname !== '/dashboard/reports' && (
+            <Button  className="bg-[#453ece]  hover:bg-[#4338CA] cursor-pointer"onClick={onAddNewEntry}>+ Entries</Button>
+          )}
           {/* User profile dropdown */}
          <DropdownMenu>
-  {/* Dropdown trigger: opens the menu */}
+  {/* Dropdown trigger opens the menu */}
   <DropdownMenuTrigger asChild>
-    {/* Single avatar button for all screen sizes */}
+    {/*user icon button for all screen sizes */}
    <Button variant="ghost" className="relative h-10 w-10 rounded-full overflow-hidden">
   <img
     className="absolute inset-0 w-full h-full object-cover"
@@ -88,10 +90,10 @@ export const AppHeader = ({ user, onAddNewEntry }) => {
 
   </DropdownMenuTrigger>
 
-  {/* Dropdown content: menu items displayed when trigger is clicked */}
+  {/* menu items displayed when trigger is clicked */}
   <DropdownMenuContent className="w-56" align="end" forceMount>
     
-    {/* User information section at the top */}
+    {/* user information section at the top */}
     <DropdownMenuLabel className="font-normal">
       <div className="flex flex-col space-y-1">
         <p className="text-sm font-medium leading-none">{user.displayName}</p>
@@ -99,13 +101,17 @@ export const AppHeader = ({ user, onAddNewEntry }) => {
       </div>
     </DropdownMenuLabel>
 
-    <DropdownMenuSeparator /> {/* Divider in buil shadcn*/}
+    <DropdownMenuSeparator /> {/* Divider in built shadcn*/}
 
-    {/* Mobile navigation links inside dropdown */}
+    {/* mobile navigation links inside dropdown */}
     <div className="md:hidden">
-      <DropdownMenuItem>Timesheets</DropdownMenuItem>
-      <DropdownMenuItem>Reports</DropdownMenuItem>
-      <DropdownMenuSeparator /> {/* Divider before profile items */}
+      <Link to="/dashboard">
+        <DropdownMenuItem>Timesheets</DropdownMenuItem>
+      </Link>
+      <Link to="/dashboard/reports">
+        <DropdownMenuItem>Reports</DropdownMenuItem>
+      </Link>
+      <DropdownMenuSeparator /> 
     </div>
 
     {/* Standard menu items for desktop and mobile */}
